@@ -29,6 +29,8 @@ async function mainMenu() {
             return addDepartment();
         case "Add a role":
             return addRole();
+        case "Add an employee":
+            return addEmployee();
     }
 }
 
@@ -114,5 +116,41 @@ async function addRole() {
         mainMenu();
 });
 };
+
+async function addEmployee() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'What is the first name of the employee you are adding?'
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'What is the last name of the employee you are adding?'
+        },
+        {
+            type: 'input',
+            name: 'roleId',
+            message: 'What is the role ID this employee is being asigned?'
+        },
+        {
+            type: 'input',
+            name: 'managerId',
+            message: 'What is this employees managers ID if applicable'
+        }
+    ])
+    const managerId = answers.managerId ? answers.managerId : null;
+    const query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+    const values = [answers.firstName, answers.lastName, answers.roleId, managerId];
+    db.query(query, values, (err, res) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("Employee added successfully");
+        }
+        mainMenu();
+    });
+}
 
 mainMenu()
