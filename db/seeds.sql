@@ -28,6 +28,10 @@ VALUES
     ("Gomez", "Jenkins", 3, 2),
     ("Henrietta", "Jones", 4, 3),
     ("Austin", "Brown", 5, NULL),
-    ("Todd", "Lamb", 6, 5);
+    ("Todd", "Lamb", 6, 5),
+    ("Mary", "Robinson", 7, 6),
+    ("Lisa", "Fleming", 8, NULL),
+    ("Audrey", "Mcintyre", 9, 8),
+    ("Homer", "Rodriquez", 10, 9);
 
     
