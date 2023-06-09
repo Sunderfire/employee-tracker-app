@@ -26,7 +26,9 @@ async function mainMenu() {
         case "View all employees":
             return viewAllEmployees();
         case "Add a department":
-            return addADepartment();
+            return addDepartment();
+        case "Add a role":
+            return addRole();
     }
 }
 
@@ -62,12 +64,12 @@ function viewAllEmployees() {
     mainMenu()
 }
 
-async function addADepartment() {
+async function addDepartment() {
     const answer = await inquirer.prompt([
         {
             type: 'input',
             name: 'name',
-            message: 'What is the name of the department you want to add?'
+            message: 'What is the name of the department you are adding?'
         }
     ])
     const query = "INSERT INTO department (name) VALUES (?)";
@@ -82,5 +84,35 @@ async function addADepartment() {
         mainMenu();
     })
 }
+
+async function addRole() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is the title of the role you are adding?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'How much does this role make?'
+        },
+        {
+            type: 'input',
+            name: 'departmentId',
+            message: 'What department ID does this role belong to?'
+        }
+    ])
+    const query = "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)";
+    const values = [answers.title, answers.salary, answers.departmentId];
+    db.query(query, values, (err, res) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("Role added successfully");
+        }
+        mainMenu();
+});
+};
 
 mainMenu()
