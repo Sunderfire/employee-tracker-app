@@ -6,7 +6,7 @@ async function mainMenu() {
         {
             type: 'list',
             name: 'choice',
-            message: 'What are you like to view?',
+            message: 'What would you like to do today?',
             choices: [
                 'View all departments',
                 'View all roles',
@@ -14,7 +14,8 @@ async function mainMenu() {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee role'
+                'Update an employee role',
+                'Exit'
             ]
         }
     ])
@@ -31,14 +32,12 @@ async function mainMenu() {
             return addRole();
         case "Add an employee":
             return addEmployee();
+        case "Update an employee role":
+            return updateEmployeeRole();
+        case "Exit":
+            return quitApp();
     }
-}
-
-
-
-
-
-
+};
 
 function viewAllDepartments() {
     const query = "SELECT * FROM department"
@@ -152,5 +151,35 @@ async function addEmployee() {
         mainMenu();
     });
 }
+
+async function updateEmployeeRole() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'employeeId',
+            message: 'Enter the ID of the employee you would like to update'
+        },
+        {
+            type: 'input',
+            name: 'roleId',
+            message: 'Enter the new role ID for this employee'
+        },
+    ]);
+    const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+    const values = [answers.roleId, answers.employeeId];
+    db.query(query, values, (err, res) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("Employee updated successfully");
+        }
+        mainMenu();
+    });
+}
+
+function quitApp() {
+    console.log('Quitting the application...');
+    process.exit(0); 
+  }
 
 mainMenu()
